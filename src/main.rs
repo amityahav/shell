@@ -9,11 +9,21 @@ fn main() {
 
         let mut input = String::new();
         io::stdin().read_line(&mut input).unwrap();
+        let trimmed_input: &str = input.trim();
 
-        if input.trim()  == "exit 0" {
-            exit(0)
+        let words: Vec<&str> = trimmed_input.split(' ').collect();
+
+        let command: &str = words[0];
+        match command {
+            "echo" =>  print!("{}", words[1..].join(" ")),
+            "exit" => {
+                let code: i32 = words[1].
+                parse().
+                expect("not a valid exit code");
+
+                exit(code);
+            },
+            &_ => println!("{}: command not found", trimmed_input)
         }
-
-        println!("{}: command not found", input.trim())
     }
 }
