@@ -64,7 +64,7 @@ fn main() {
                             continue;
                         }
 
-                        // run the executable and print its stdout,stderr.
+                        // run the executable and print its stdout, stderr.
                         let output = Command::new(command)
                         .arg(words[1..].join(" "))
                         .output();
