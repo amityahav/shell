@@ -1,6 +1,8 @@
+use std::f32::consts::E;
 #[allow(unused_imports)]
 use std::io::{self, Write};
 use std::collections::HashSet;
+use std::path;
 use std::process::exit;
 use std::env;
 use std::fs;
@@ -60,7 +62,13 @@ fn handle_input(input: &str) {
                 },
                 Err(e) => eprintln!("{}", e)
             }
-        }
+        },
+        "pwd" => {
+            match env::current_dir() {
+                Ok(path) => println!("{}", path.display()),
+                Err(e) => eprintln!("Failed to get current directory: {}", e)
+            }
+        },
         &_ => {
             match command_in_path_env(command) {
                 Ok(path_name) => {
