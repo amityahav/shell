@@ -9,8 +9,8 @@ use std::env;
 use crate::utils;
 
 pub struct Shell {
-    pub builtins: HashSet<String>,
-    pub cwd: String
+    builtins: HashSet<String>,
+    cwd: String
 }
 
 impl Shell {
