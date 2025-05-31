@@ -52,11 +52,13 @@ impl Shell {
         let command: &str = words[0];
         match command {
             "echo" =>  {
-                if words[1..].len() > 1 && words[1] == "'" && words[words.len()-1] == "'" {
+                let prompt = words[1..].join(" ");
+                let mut chars = prompt.chars();
+                if prompt.len() >= 2 && chars.nth(0).unwrap() == '\'' && chars.nth(prompt.len()-1).unwrap() == '\'' {
                     println!("{}", words[1..words.len()-1].join(" "));
                     return;
                 }
-                
+
                 println!("{}", words[1..].join(" "));
             },
             "exit" => {
