@@ -15,7 +15,7 @@ fn main() {
 
         let command: &str = words[0];
         match command {
-            "echo" =>  print!("{}", words[1..].join(" ")),
+            "echo" =>  println!("{}", words[1..].join(" ")),
             "exit" => {
                 let code: i32 = words[1].
                 parse().
