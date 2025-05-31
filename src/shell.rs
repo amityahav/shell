@@ -53,8 +53,8 @@ impl Shell {
         match command {
             "echo" =>  {
                 let prompt = words[1..].join(" ");
-                let mut chars = prompt.chars();
                 if prompt.len() >= 2 {
+                    let mut chars = prompt.chars();
                     let first = chars.next().unwrap();
                     let last = chars.next_back().unwrap();
                     if first == '\'' && last == '\'' {
@@ -63,8 +63,8 @@ impl Shell {
                         return;
                     }
                 }
-
-                println!("{}", words[1..].join(" "));
+                
+                println!("{}", utils::collapse_whitespace(&prompt));
             },
             "exit" => {
                 let code: i32 = words[1].

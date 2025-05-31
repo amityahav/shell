@@ -61,3 +61,22 @@ pub fn canoncalize(cwd: String, relative_path: String) -> String {
 
    res.join("/").to_string()
 }
+
+pub fn collapse_whitespace(s: &str) -> String {
+    let mut result = String::new();
+    let mut prev_was_whitespace = false;
+
+    for c in s.chars() {
+        if c.is_whitespace() {
+            if !prev_was_whitespace {
+                result.push(' ');
+                prev_was_whitespace = true;
+            }
+        } else {
+            result.push(c);
+            prev_was_whitespace = false;
+        }
+    }
+
+    result.trim().to_string()
+}
