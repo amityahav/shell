@@ -42,6 +42,7 @@ fn main() {
 
                 let path_var = env::var("PATH").expect("path not set");
                 let paths: Vec<&str> = path_var.split(':').collect();
+                let mut found: bool = false;
 
                 for p in paths {
                     let path = Path::new(p);
@@ -52,7 +53,8 @@ fn main() {
                                     Ok(ent) => {
                                         if ent.file_name() == command {
                                             println!("{} is {}/{}", command, p, command);
-                                            continue;
+                                            found = true;
+                                            break;
                                         }
                                     },
                                     Err(e) => eprintln!("Failed to read entry: {}", e)
@@ -62,8 +64,10 @@ fn main() {
                         Err(e) => eprintln!("Failed to read directory: {}", e)
                     }
                 }
-
-                println!("{}: not found", command);
+                                
+                if !found {
+                    println!("{}: not found", command);
+                }
             }
             &_ => println!("{}: command not found", trimmed_input)
         }
