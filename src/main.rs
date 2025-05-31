@@ -63,11 +63,13 @@ fn main() {
                         },
                         Err(e) => eprintln!("Failed to read directory: {}", e)
                     }
+
+                    if found {
+                        break;
+                    }
                 }
                                 
-                if !found {
-                    println!("{}: not found", command);
-                }
+                println!("{}: not found", command);
             }
             &_ => println!("{}: command not found", trimmed_input)
         }
