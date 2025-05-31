@@ -51,7 +51,14 @@ impl Shell {
     
         let command: &str = words[0];
         match command {
-            "echo" =>  println!("{}", words[1..].join(" ")),
+            "echo" =>  {
+                if words[1..].len() > 1 && words[1] == "'" && words[words.len()-1] == "'" {
+                    println!("{}", words[1..words.len()-1].join(" "));
+                    return;
+                }
+                
+                println!("{}", words[1..].join(" "));
+            },
             "exit" => {
                 let code: i32 = words[1].
                 parse().
