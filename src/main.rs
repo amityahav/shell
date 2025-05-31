@@ -73,6 +73,7 @@ fn main() {
                             Ok(out) => {
                                 println!("{}", String::from_utf8_lossy(&out.stdout));
                                 eprintln!("{}", String::from_utf8_lossy(&out.stderr));
+                                print!("$ ");
                             },
                             Err(e) => eprintln!("Failed getting executable output: {}", e)
                         }
