@@ -83,24 +83,31 @@ impl Shell {
             "pwd" => println!("{}", self.cwd),
             "cd" => {
                 let p = words[1];
-                let path = Path::new(p);
+                if p.is_empty() {
+                    return;
+                }
+
+                let mut path = Path::new(p);
+                let res: String;
+
+                if p.chars().nth(0).unwrap() == '~' {
+                    let home_var = env::var("HOME").expect("HOME var not set");
+                    let substr: String = p.chars().skip(1).collect();
+                    let relative = format!("{}{}", ".", substr);
+                    res = canoncalize(home_var, relative);
+                } else if path.is_relative() {
+                    res = canoncalize(self.cwd.to_string(), p.to_string());
+                } else {
+                    res = p.to_string();
+                }
+
+                path = Path::new(&res);
                 if !path.exists() {
                     eprintln!("cd: {}: No such file or directory", p);
                     return;
                 }
 
-                if path.is_absolute() {
-                    self.cwd = p.to_string();
-                    return;
-                }
-
-                let abs_path = canoncalize(self.cwd.to_string(), p.to_string());
-                if !Path::new(&abs_path).exists() {
-                    eprintln!("cd: {}: No such file or directory", p);
-                    return; 
-                }
-
-                self.cwd = abs_path;
+                self.cwd = res;
             }
             &_ => {
                 match command_in_path_env(command) {
@@ -135,7 +142,7 @@ impl Shell {
 /// returns the full path of command_name in case it exists in one of the paths under the PATH environment variable.
 /// if no path found, an empty string will be returned.
 fn command_in_path_env(command_name: &str) -> Result<String, String>{
-    let path_var = env::var("PATH").expect("path not set");
+    let path_var = env::var("PATH").expect("PATH not set");
     let paths: Vec<&str> = path_var.split(':').collect();
 
     for p in paths {
