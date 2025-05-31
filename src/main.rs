@@ -34,7 +34,7 @@ fn main() {
                 if builtins.contains(words[1]) {
                     println!("{} is a shell builtin", words[1]);
                 } else {
-                    println!("{}: command not found", trimmed_input);
+                    println!("{}: command not found", words[1]);
                 }
             }
             &_ => println!("{}: command not found", trimmed_input)
