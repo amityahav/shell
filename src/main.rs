@@ -65,7 +65,7 @@ fn main() {
                         }
 
                         // run the executable and print its stdout,stderr.
-                        let output = Command::new(path_name)
+                        let output = Command::new(command)
                         .arg(words[1..].join(" "))
                         .output();
 
