@@ -1,8 +1,14 @@
 #[allow(unused_imports)]
 use std::io::{self, Write};
+use std::collections::HashSet;
 use std::process::exit;
 
 fn main() {
+    let builtins : HashSet<&str> = vec![
+        "echo",
+         "exit",
+         ].into_iter().collect();
+
     loop {
         print!("$ ");
         io::stdout().flush().unwrap();
@@ -23,6 +29,13 @@ fn main() {
 
                 exit(code);
             },
+            "type" => {
+                if builtins.contains(words[1]) {
+                    println!("{} is a shell builtin", words[1]);
+                } else {
+                    println!("{}: command not found", trimmed_input);
+                }
+            }
             &_ => println!("{}: command not found", trimmed_input)
         }
     }
