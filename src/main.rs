@@ -65,11 +65,13 @@ fn main() {
                     }
 
                     if found {
-                        break;
+                        break
                     }
                 }
                                 
-                println!("{}: not found", command);
+                if !found {
+                    println!("{}: not found", command);
+                }
             }
             &_ => println!("{}: command not found", trimmed_input)
         }
