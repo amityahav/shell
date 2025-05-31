@@ -1,4 +1,3 @@
-use std::f32::consts::E;
 #[allow(unused_imports)]
 use std::io::{self, Write};
 use std::collections::HashSet;
@@ -67,7 +66,14 @@ fn handle_input(input: &str) {
         "pwd" => {
             match env::current_dir() {
                 Ok(path) => println!("{}", path.display()),
-                Err(e) => eprintln!("Failed to get current directory: {}", e)
+                Err(e) => {
+                    if e.raw_os_error() == Some(2) {
+                        eprintln!("Failed to get current directory: No such file or directory");
+                        return;
+                    }
+
+                    eprintln!("Failed to get current directory: {}", e)
+                }
             }
         },
         "cd" => {
