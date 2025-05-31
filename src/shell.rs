@@ -54,13 +54,14 @@ impl Shell {
             "echo" =>  {
                 let prompt = words[1..].join(" ");
                 let mut chars = prompt.chars();
-                if prompt.len() >= 2 && chars.nth(0).unwrap() == '\'' && chars.nth(prompt.len()-1).unwrap() == '\'' {
-                    chars.next();
-                    chars.next_back();
-
-                    let res: String = chars.collect();
-                    println!("{}", res);
-                    return;
+                if prompt.len() >= 2 {
+                    let first = chars.next().unwrap();
+                    let last = chars.next_back().unwrap();
+                    if first == '\'' && last == '\'' {
+                        let res: String = chars.collect();
+                        println!("{}", res);
+                        return;
+                    }
                 }
 
                 println!("{}", words[1..].join(" "));
