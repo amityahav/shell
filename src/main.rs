@@ -178,6 +178,9 @@ fn canoncalize(cwd: String, relative_path: String) -> String {
 
     for d in rp_dirs {
         match d {
+            "" => {
+                // do nothing if the path ends with / .
+            }
             "." => {
                 // stay in the same directory.
             },
