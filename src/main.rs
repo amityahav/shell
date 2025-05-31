@@ -66,14 +66,7 @@ fn handle_input(input: &str) {
         "pwd" => {
             match env::current_dir() {
                 Ok(path) => println!("{}", path.display()),
-                Err(e) => {
-                    if e.raw_os_error() == Some(2) {
-                        eprintln!("Failed to get current directory: No such file or directory");
-                        return;
-                    }
-
-                    eprintln!("Failed to get current directory: {}", e)
-                }
+                Err(e) => eprintln!("Failed to get current directory: {}", e)
             }
         },
         "cd" => {
@@ -81,9 +74,16 @@ fn handle_input(input: &str) {
             let path = Path::new(p);
             match env::set_current_dir(path) {
                 Ok(_) => {},
-                Err(e) => eprintln!("cd: {}: {}", p, e)
+                Err(e) => {
+                    if e.raw_os_error() == Some(2) {
+                        eprintln!("cd: {}: No such file or directory", p);
+                        return;
+                    }
+
+                    eprintln!("cd: {}: {}", p, e);
+                }
             }
-        },
+        }
         &_ => {
             match command_in_path_env(command) {
                 Ok(path_name) => {
