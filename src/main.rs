@@ -71,7 +71,7 @@ fn main() {
 
                         match output {
                             Ok(out) => {
-                                println("{}", String::from_utf8_lossy(&out.stdout));
+                                print!("{}", String::from_utf8_lossy(&out.stdout));
                                 eprintln!("{}", String::from_utf8_lossy(&out.stderr));
                             },
                             Err(e) => eprintln!("Failed getting executable output: {}", e)
