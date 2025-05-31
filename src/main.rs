@@ -7,6 +7,7 @@ fn main() {
     let builtins : HashSet<&str> = vec![
         "echo",
          "exit",
+         "type",
          ].into_iter().collect();
 
     loop {
