@@ -55,7 +55,11 @@ impl Shell {
                 let prompt = words[1..].join(" ");
                 let mut chars = prompt.chars();
                 if prompt.len() >= 2 && chars.nth(0).unwrap() == '\'' && chars.nth(prompt.len()-1).unwrap() == '\'' {
-                    println!("{}", words[1..words.len()-1].join(" "));
+                    chars.next();
+                    chars.next_back();
+
+                    let res: String = chars.collect();
+                    println!("{}", res);
                     return;
                 }
 
