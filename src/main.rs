@@ -1,8 +1,6 @@
-use std::f32::consts::E;
 #[allow(unused_imports)]
 use std::io::{self, Write};
 use std::collections::HashSet;
-use std::path;
 use std::process::exit;
 use std::env;
 use std::fs;
@@ -27,6 +25,7 @@ fn handle_input(input: &str) {
         "echo",
          "exit",
          "type",
+         "pwd",
          ].into_iter().collect();
 
     let words: Vec<&str> = input.split(' ').collect();
