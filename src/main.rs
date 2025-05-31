@@ -1,3 +1,4 @@
+use std::f32::consts::E;
 #[allow(unused_imports)]
 use std::io::{self, Write};
 use std::collections::HashSet;
@@ -26,6 +27,7 @@ fn handle_input(input: &str) {
          "exit",
          "type",
          "pwd",
+         "cd",
          ].into_iter().collect();
 
     let words: Vec<&str> = input.split(' ').collect();
@@ -66,6 +68,14 @@ fn handle_input(input: &str) {
             match env::current_dir() {
                 Ok(path) => println!("{}", path.display()),
                 Err(e) => eprintln!("Failed to get current directory: {}", e)
+            }
+        },
+        "cd" => {
+            let p = words[1];
+            let path = Path::new(p);
+            match env::set_current_dir(path) {
+                Ok(_) => {},
+                Err(e) => eprintln!("cd: {}: {}", p, e)
             }
         },
         &_ => {
