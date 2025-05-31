@@ -8,77 +8,81 @@ use std::path::Path;
 use std::process::Command;
 
 fn main() {
-    let builtins : HashSet<&str> = vec![
-        "echo",
-         "exit",
-         "type",
-         ].into_iter().collect();
-
     loop {
         print!("$ ");
         io::stdout().flush().unwrap();
 
         let mut input = String::new();
         io::stdin().read_line(&mut input).unwrap();
+
         let trimmed_input: &str = input.trim();
+        handle_input(trimmed_input);
+    }
+}
 
-        let words: Vec<&str> = trimmed_input.split(' ').collect();
+fn handle_input(input: &str) {
+    let builtins : HashSet<&str> = vec![
+        "echo",
+         "exit",
+         "type",
+         ].into_iter().collect();
 
-        let command: &str = words[0];
-        match command {
-            "echo" =>  println!("{}", words[1..].join(" ")),
-            "exit" => {
-                let code: i32 = words[1].
-                parse().
-                expect("not a valid exit code");
+    let words: Vec<&str> = input.split(' ').collect();
 
-                exit(code);
-            },
-            "type" => {
-                let command = words[1];
+    let command: &str = words[0];
+    match command {
+        "echo" =>  println!("{}", words[1..].join(" ")),
+        "exit" => {
+            let code: i32 = words[1].
+            parse().
+            expect("not a valid exit code");
 
-                // first check if this is a sell builtin command.
-                if builtins.contains(command) {
-                    println!("{} is a shell builtin", command);
-                    continue;
-                }
+            exit(code);
+        },
+        "type" => {
+            let command = words[1];
 
-                // second check if this command exists under PATH.
-                match command_in_path_env(command) {
-                    Ok(path_name) => {
-                        if path_name.is_empty() {
-                            println!("{}: not found", command);
-                            continue;
-                        }
-
-                        println!("{} is {}", command, path_name)
-                    },
-                    Err(e) => eprintln!("{}", e)
-                }
+            // first check if this is a sell builtin command.
+            if builtins.contains(command) {
+                println!("{} is a shell builtin", command);
+                return;
             }
-            &_ => {
-                match command_in_path_env(command) {
-                    Ok(path_name) => {
-                        if path_name.is_empty() {
-                            println!("{}: command not found", trimmed_input);
-                            continue;
-                        }
 
-                        // run the executable and print its stdout, stderr.
-                        let output = Command::new(command)
-                        .arg(words[1..].join(" "))
-                        .output();
+            // second check if this command exists under PATH.
+            match command_in_path_env(command) {
+                Ok(path_name) => {
+                    if path_name.is_empty() {
+                        println!("{}: not found", command);
+                        return;
+                    }
 
-                        match output {
-                            Ok(out) => {
-                                print!("{}", String::from_utf8_lossy(&out.stdout));
-                                eprint!("{}", String::from_utf8_lossy(&out.stderr));
-                            },
-                            Err(e) => eprintln!("Failed getting executable output: {}", e)
-                        }
-                    },
-                    Err(e) => eprintln!("{}", e)
-                }
+                    println!("{} is {}", command, path_name)
+                },
+                Err(e) => eprintln!("{}", e)
+            }
+        }
+        &_ => {
+            match command_in_path_env(command) {
+                Ok(path_name) => {
+                    if path_name.is_empty() {
+                        println!("{}: command not found", input);
+                        return;
+                    }
+
+                    // run the executable and print its stdout, stderr.
+                    let output = Command::new(command)
+                    .arg(words[1..].join(" "))
+                    .output();
+
+                    match output {
+                        Ok(out) => {
+                            print!("{}", String::from_utf8_lossy(&out.stdout));
+                            eprint!("{}", String::from_utf8_lossy(&out.stderr));
+                        },
+                        Err(e) => eprintln!("Failed getting executable output: {}", e)
+                    }
+                },
+                Err(e) => eprintln!("{}", e)
             }
         }
     }
